@@ -12,7 +12,13 @@ if (empty($_POST)&& empty($_GET)) {
 else if(isset($_GET['action'])){
     $action=$_GET['action'];
     switch($action){
-    
+        case "loadData":
+            // $users = getAllUsers();
+            // $_SESSION['users'] = $users;
+
+            header('Location: ');
+            include(ROOT.'IHM\Admin\dashboard.php');
+            break;
         default:
             echo "Action non reconnue";
     }
