@@ -1,45 +1,3 @@
-<?php
-// Connexion à la base de données
-$servername = "localhost";
-$username = "root"; 
-$password = "Hf_MySQl_root+2684"; 
-$dbname = "electricity"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
-// Récupérer les consommations des clients
-$sql = "SELECT id_consommation, client_id, mois, annee, valeur_compteur, photo_compteur, validee
-        FROM consommation ";
-$result = $conn->query($sql);
-$consommations = [];
-
-while ($row = $result->fetch_assoc()) {
-    $consommations[] = $row;
-}
-// Mise à jour de la consommation
-$stmt = $conn->prepare("UPDATE consommation SET valeur_compteur = ?, validee = 1 WHERE id_consommation = ?");
-$stmt->bind_param("di", $valeur_compteur, $id_consommation);
-
-// Mettre à jour une consommation en cas d'erreur
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
-    $id = $_POST['id_consommation'];
-    $valeur = $_POST['valeur_compteur'];
-
-    $stmt = $conn->prepare("UPDATE consommation SET valeur_compteur = ?, validee = 1 WHERE id_consommation = ?");
-    $stmt->bind_param("di", $valeur, $id);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Valeur corrigée avec succès !'); window.location.href='consommation.php;</script>";
-    }
-}
-
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,11 +61,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         </div>
       </div>
     </header>
-   
+    <?php
+        if(isset($message)&& !empty($message)){
+            echo "<script>alert('".$message."');</script>";
+        }
+    ?>
     <main>
         <div class="main">
             <div class="main-container">
                 <h2>Validation des Consommations</h2>
+                <?php
+                    if(isset($errors)&& !empty($errors)){
+                    echo "<span style=\"color: red;\"> $errors </span>";
+                    }
+                ?>
                 <table id="reclamationTable">
                     <thead>
                 <tr>
@@ -146,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
                             </td>
                             <td>
                               
-                                <a href='facture.php?id=<?= $conso['client_id'] ?>' 
+                                <a href='/Traitement/Utilisateurs.php?action=generer_facture&id=<?= $conso['client_id'] ?>' 
                                    class='btn btn-success'>Générer Facture</a>
                             </td>
                 </tr>

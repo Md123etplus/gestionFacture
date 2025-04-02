@@ -49,7 +49,7 @@
                 </div>
               <?php endif; ?>
 
-              <form action="handle_login.php" method="post">
+              <form action="/Traitement/Utilisateurs.php" method="post">
                 <div class="form-group">
                   <label for="username">Email</label>
                   <input type="email" class="form-control" id="username" name="username" placeholder="Entrez votre email" required>
@@ -59,7 +59,7 @@
                   <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
                 </div>
                 <div class="form-group">
-                  <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                  <button type="submit" name="handle_login" class="btn btn-primary btn-block">Se connecter</button>
                 </div>
                 <div class="form-group text-center">
                   <a href="forgot_password.html">Mot de passe oublié ?</a>

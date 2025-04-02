@@ -1,47 +1,3 @@
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Connexion à la base de données
-    $conn = new mysqli("localhost", "root", "Hf_MySQl_root+2684", "electricity");
-
-    if ($conn->connect_error) {
-        die("Échec de la connexion : " . $conn->connect_error);
-    }
-
-    // Récupération des données du formulaire
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $mot_de_passe = password_hash($_POST['mot_de_passe'], PASSWORD_DEFAULT); // Hash du mot de passe
-    $type = 'client'; // On force le type à 'client'
-    $numero_compteur = $_POST['numero_compteur'];
-    $adresse_installation = $_POST['adresse_installation'];
-
-    // Insérer dans `utilisateur`
-    $sql_utilisateur = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, type) 
-                        VALUES ('$nom', '$prenom', '$email', '$mot_de_passe', '$type')";
-    
-    if ($conn->query($sql_utilisateur) === TRUE) {
-        // Récupérer l'ID du nouvel utilisateur
-        $id_utilisateur = $conn->insert_id;
-
-        // Insérer dans `client`
-        $sql_client = "INSERT INTO client (id_client, numero_compteur, adresse_installation) 
-                       VALUES ('$id_utilisateur', '$numero_compteur', '$adresse_installation')";
-        
-        if ($conn->query($sql_client) === TRUE) {
-            echo "<script>alert('Client ajouté avec succès !'); window.location.href='clients.php';</script>";
-        } else {
-            echo "Erreur lors de l'ajout du client : " . $conn->error;
-        }
-    } else {
-        echo "Erreur lors de l'ajout de l'utilisateur : " . $conn->error;
-    }
-
-    $conn->close();
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -200,8 +156,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="main">
         <div class="form-container">
+          <?php
+            if(isset($errors)&& !empty($errors)){
+              echo "<span style=\"color: red;\"> $errors </span>";
+            }
+          ?>
             <h2>Ajouter un Nouveau Client</h2>
-            <form action="add_client.php" method="POST">
+            <form action="/Traitement/Utilisateurs.php" method="POST">
             <div class="mb-3">
                 <label class="form-label">Nom :</label>
                 <input type="text" name="nom" class="form-control" required>
@@ -226,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label">Adresse d'installation :</label>
                 <input type="text" name="adresse_installation" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <button type="submit" name="add_client" class="btn btn-primary">Ajouter</button>
         </form>
         </div>
     </div>

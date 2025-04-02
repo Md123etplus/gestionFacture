@@ -1,21 +1,3 @@
-<?php
-// Connexion à la base de données
-$servername = "localhost";
-$username = "root"; 
-$password = "Hf_MySQl_root+2684"; 
-$dbname = "electricity"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
-
-// Récupération des réclamations
-$sql = "SELECT id_client, numero_compteur, adresse_installation FROM client";
-$result = $conn->query($sql);
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -239,13 +221,23 @@ $result = $conn->query($sql);
       </div>
     </header>
     <main>
+    <?php
+        if(isset($message)&& !empty($message)){
+            echo "<script>alert('".$message."');</script>";
+        }
+    ?>
         <div class="main">
             <div class="main-container">
                 <div class="table-header">
                 <h2 class="page-title">Clients</h2>
-                    <button class="add-new-btn" onclick="window.location.href='add_client.php'">Ajouter un client</button>
+                    <button class="add-new-btn" onclick="window.location.href='/IHM/Admin/add_client.php'">Ajouter un client</button>
 
                 </div>
+                <?php
+                    if(isset($errors)&& !empty($errors)){
+                    echo "<span style=\"color: red;\"> $errors </span>";
+                    }
+                ?>
                 <table id="reclamationTable">
                     <thead>
                     <tr>
@@ -258,8 +250,8 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>
                     <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
+                if ($clients->num_rows > 0) {
+                    while ($row = $clients->fetch_assoc()) {
                         echo "<tr>
                                 <td>{$row['id_client']}</td>
                                 <td>{$row['numero_compteur']}</td>
@@ -289,7 +281,7 @@ $result = $conn->query($sql);
         // Fonctions pour gérer les actions
         function editClient(clientId) {
             // Redirection vers la page de modification avec l'ID du client
-            window.location.href = 'edit_client.php?id=' + clientId;
+            window.location.href = '/IHM/Admin/edit_client.php?id=' + clientId;
         }
 
        

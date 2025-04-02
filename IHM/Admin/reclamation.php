@@ -1,22 +1,3 @@
-<?php
-// Connexion à la base de données
-$servername = "localhost";
-$username = "root"; 
-$password = "Hf_MySQl_root+2684"; 
-$dbname = "electricity"; 
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
-
-// Récupération des réclamations
-$sql = "SELECT id_reclamation, client_id, date_soumission, type_reclamation, statut FROM reclamation";
-$result = $conn->query($sql);
-?>
-                       
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -26,7 +7,7 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="Reclamation.css">
+    <link rel="stylesheet" href="css/Reclamation.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
@@ -76,10 +57,21 @@ $result = $conn->query($sql);
         </div>
       </div>
     </header>
+
+    <?php
+        if(isset($message)&& !empty($message)){
+            echo "<script>alert('".$message."');</script>";
+        }
+    ?>
     <main>
         <div class="main">
             <div class="main-container">
                 <h2>Liste des Réclamations</h2>
+                <?php
+                    if(isset($errors)&& !empty($errors)){
+                    echo "<span style=\"color: red;\"> $errors </span>";
+                    }
+                ?>
                 <table id="reclamationTable">
                     <thead>
                     <tr>
@@ -93,8 +85,8 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>
                     <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
+                if ($reclamations->num_rows > 0) {
+                    while ($row = $reclamations->fetch_assoc()) {
                         echo "<tr>
                                 <td>{$row['id_reclamation']}</td>
                                 <td>{$row['client_id']}</td>
@@ -102,7 +94,7 @@ $result = $conn->query($sql);
                                 <td>{$row['type_reclamation']}</td>
                                 <td>{$row['statut']}</td>
                                 <td>
-                                    <a href='Traitement_reclamation.php?id={$row['id_reclamation']}' class='btn btn-warning'>Traiter</a>
+                                    <a href='/Traitement/Utilisateurs.php?action=traiter_reclamation&id={$row['id_reclamation']}' class='btn btn-warning'>Traiter</a>
                                 </td>
                               </tr>";
                     }
@@ -117,7 +109,7 @@ $result = $conn->query($sql);
             </div>
         </div>
     </main>
-    <script src="reclamation.js"></script> 
+    <script src="js/reclamation.js"></script> 
     <script>
         // Fonctions pour gérer les actions
         function editClient(clientId) {
