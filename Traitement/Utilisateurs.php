@@ -5,8 +5,8 @@ if (empty($_POST)&& empty($_GET)) {
     // $users = getAllUsers();
     // $_SESSION['users'] = $users;
     // header('Location: ');
-    // include('..\IHM\utilisateur\index.php');
-    include(ROOT.'IHM\utilisateur\index.php');
+    // include('..\IHM\index.php');
+    include(ROOT.'IHM\index.php');
     exit();
 }
 else if(isset($_GET['action'])){
