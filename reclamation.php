@@ -2,7 +2,7 @@
 // Connexion à la base de données
 $servername = "localhost";
 $username = "root"; 
-$password = ""; 
+$password = "Hf_MySQl_root+2684"; 
 $dbname = "electricity"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);

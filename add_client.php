@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Connexion à la base de données
-    $conn = new mysqli("localhost", "root", "", "electricity");
+    $conn = new mysqli("localhost", "root", "Hf_MySQl_root+2684", "electricity");
 
     if ($conn->connect_error) {
         die("Échec de la connexion : " . $conn->connect_error);

@@ -2,7 +2,7 @@
 require('fpdf/fpdf.php');
 
 // Connexion à la base de données
-$conn = new mysqli("localhost", "root", "", "electricity");
+$conn = new mysqli("localhost", "root", "Hf_MySQl_root+2684", "electricity");
 $conn->set_charset("utf8");
 
 if ($conn->connect_error) {

@@ -51,7 +51,7 @@
                   <a class="nav-link" href="admin-releves.html">Relevés</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="index.html">Déconnexion</a>
+                  <a class="nav-link" href="handle_logout.php">Déconnexion</a>
                 </li>
               </ul>
             </div>

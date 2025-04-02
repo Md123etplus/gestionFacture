@@ -9,7 +9,7 @@ require 'PHPMailer/PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer/PHPMailer-master/src/SMTP.php';
 
 // Connexion à la base de données
-$conn = new mysqli("localhost", "root", "", "electricity");
+$conn = new mysqli("localhost", "root", "Hf_MySQl_root+2684", "electricity");
 
 if ($conn->connect_error) {
     die("Échec de la connexion : " . $conn->connect_error);

@@ -49,7 +49,7 @@
                 </div>
               <?php endif; ?>
 
-              <form action="login.php" method="post">
+              <form action="handle_login.php" method="post">
                 <div class="form-group">
                   <label for="username">Email</label>
                   <input type="email" class="form-control" id="username" name="username" placeholder="Entrez votre email" required>
