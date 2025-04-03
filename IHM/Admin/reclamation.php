@@ -85,7 +85,7 @@
                     </thead>
                     <tbody>
                     <?php
-                if ($reclamations->num_rows > 0) {
+                if (isset($reclamations)) {
                     while ($row = $reclamations->fetch_assoc()) {
                         echo "<tr>
                                 <td>{$row['id_reclamation']}</td>

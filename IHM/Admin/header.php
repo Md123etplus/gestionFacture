@@ -21,22 +21,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="admin.html">Dashboard</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="admin-clients.html">Gestion Clients</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php?action=getAllClients">Gestion Clients</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="admin-factures.html">Factures</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php?action=consommation">Factures</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="admin-reclamations.html">Réclamations</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php?action=reclamation">Réclamations</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="admin-releves.html">Relevés</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.html">Déconnexion</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php?action=logout">Déconnexion</a>
             </li>
             </ul>
         </div>

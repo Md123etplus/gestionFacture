@@ -74,6 +74,7 @@
                     if(isset($errors)&& !empty($errors)){
                     echo "<span style=\"color: red;\"> $errors </span>";
                     }
+     
                 ?>
                 <table id="reclamationTable">
                     <thead>
@@ -88,7 +89,10 @@
                 <th>Actions</th>
             </tr>
 
-            <?php foreach ($consommations as $conso): 
+            <?php 
+            
+            if(isset($consommations)){
+              foreach ($consommations as $conso): 
                 
             ?>
                 <tr >
@@ -119,6 +123,13 @@
                 </tr>
             <?php endforeach; ?>
 
+            <?php
+                  }
+                  else{
+                    echo "<tr style=\"color: red;\"> Aucune donnée de consommation </tr>";
+                  }
+
+            ?>
 
 
             
