@@ -4,7 +4,7 @@
         <div class="card-body">
         <h5 class="card-title">Total Clients</h5>
         <p class="card-text display-4">458</p>
-        <p class="card-text">+12 ce mois-ci</p>
+        <p class="card-text">ce mois-ci</p>
         </div>
     </div>
     </div>

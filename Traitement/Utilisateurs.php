@@ -13,12 +13,41 @@ else if(isset($_GET['action'])){
     $action=$_GET['action'];
     switch($action){
         case "loadData":
-            // $users = getAllUsers();
-            // $_SESSION['users'] = $users;
+            $users = getAllUsers();
+            // print_r($users);
+            echo json_encode(value: ["success" => true, "users" => $users]);
+            exit();
 
-            header('Location: ');
-            include(ROOT.'IHM\Admin\dashboard.php');
-            break;
+        case "loadStatistics":
+            // echo "Loading statistics...";
+            $stats = getStatistics();
+            // print_r($stats);
+            echo json_encode(["success" => true] + $stats);
+            exit();
+
+        case "loadAnomalies":
+            $html = getAnomaliesHTML();
+            // error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
+            echo json_encode(["success" => true, "html" => $html]);
+            exit();
+
+        case "loadRecentReclamations":
+            $html = getRecentReclamationsHTML();
+            error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
+
+            echo json_encode(["success" => true, "html" => $html]);
+            exit();
+
+        case "loadGlobalConsumption":
+            $data = getGlobalConsumptionData();
+            echo json_encode(["success" => true] + $data);
+            exit();
+
+        case "loadClaimsDistribution":
+            $data = getClaimsDistributionData();
+            echo json_encode(["success" => true] + $data);
+            exit();
+
         case "getAllClients":
             $clients = get_all_clients();
 
@@ -27,27 +56,27 @@ else if(isset($_GET['action'])){
             break;
 
         case "editClient":
-            // Vérifier si un ID client est fourni
-            if (!isset($_GET['id']) || empty($_GET['id'])) {
-                $errors = "ID client non valide.";
-                include(ROOT.'IHM\Admin\clients.php');
-            }
-            else{
-                $id_client = intval($_GET['id']); // Sécuriser l'ID
-                $result = get_client_by_id($id_client);
+            // // Vérifier si un ID client est fourni
+            // if (!isset($_GET['id']) || empty($_GET['id'])) {
+            //     $errors = "ID client non valide.";
+            //     include(ROOT.'IHM\Admin\clients.php');
+            // }
+            // else{
+            //     $id_client = intval($_GET['id']); // Sécuriser l'ID
+            //     $result = get_client_by_id($id_client);
     
-                if($result->num_rows == 0){
-                    $errors = "Client non trouvé";  
-                    $clients = get_all_clients();
-                    include(ROOT.'IHM\Admin\clients.php');             
-                }
-                else{
-                    $client = $result->fetch_assoc();
-                    header('Location: ');
-                    include(ROOT.'IHM\Admin\clients.php');
-                }
-            }         
-            break;
+            //     if($result->num_rows == 0){
+            //         $errors = "Client non trouvé";  
+            //         $clients = get_all_clients();
+            //         include(ROOT.'IHM\Admin\clients.php');             
+            //     }
+            //     else{
+            //         $client = $result->fetch_assoc();
+            //         header('Location: ');
+            //         include(ROOT.'IHM\Admin\clients.php');
+            //     }
+            // }         
+            // break;
 
         case "reclamation":
             $reclamations = get_all_reclamation();

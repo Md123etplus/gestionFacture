@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AMENDIS - Administration</title>
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/IHM/css/bootstrap.css">
+  <link rel="stylesheet" href="/IHM/css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -36,13 +36,17 @@
     </section>
   <!-- Footer Section -->
   <?php include('footer.php') ?>
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
-  <script scr="js/loadData.js"></script>
-  <script src="js/upload.js"></script>
+  <script src="/IHM/js/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
+  <script src="/IHM/js/custom.js"></script>
+
+  <script src="/IHM/js/upload.js"></script>
+  <script src="/IHM/js/bootstrap.js"></script>
+  <!-- <script src="/IHM/js/custom.js"></script> -->
+  <!-- <script src="js/upload.js"></script> -->
   <!-- Bootstrap JS + Popper.js -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/IHM/js/loadData.js"></script>
+
 </body>
 
 </html>
