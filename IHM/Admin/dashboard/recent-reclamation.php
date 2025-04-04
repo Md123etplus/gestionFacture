@@ -3,7 +3,9 @@
     <div class="card">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">Réclamations Récentes</h5>
-        <a href="admin-reclamations.html" class="btn btn-sm btn-primary">Gérer toutes les réclamations</a>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#reclamationsModal">
+            Gérer toutes les réclamations
+        </button>
         </div>
         <div class="card-body">
         <div class="table-responsive">

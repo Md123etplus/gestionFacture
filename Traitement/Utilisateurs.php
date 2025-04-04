@@ -30,14 +30,24 @@ else if(isset($_GET['action'])){
             // error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
             echo json_encode(["success" => true, "html" => $html]);
             exit();
-
+        case "getAllAnomalies":
+            $html = getAllAnomaliesHTML();
+            // error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
+            echo json_encode(["success" => true, "html" => $html]);
+            exit();
         case "loadRecentReclamations":
             $html = getRecentReclamationsHTML();
-            error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
+            // error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
 
             echo json_encode(["success" => true, "html" => $html]);
             exit();
 
+        case "loadAllReclamations":
+            $html = getAllReclamationsHTML();
+            // error_log("HTML Anomalies: " . $html); // Pour vérifier la valeur générée
+
+            echo json_encode(["success" => true, "html" => $html]);
+            exit();
         case "loadGlobalConsumption":
             $data = getGlobalConsumptionData();
             echo json_encode(["success" => true] + $data);

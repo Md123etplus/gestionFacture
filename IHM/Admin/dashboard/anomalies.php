@@ -3,7 +3,9 @@
     <div class="card">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">Anomalies de Relevé à Traiter</h5>
-        <a href="admin-releves.html" class="btn btn-sm btn-primary">Voir toutes les anomalies</a>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#anomaliesModal">
+            Voir toutes les anomalies
+        </button>
         </div>
         <div class="card-body">
         <div class="table-responsive">

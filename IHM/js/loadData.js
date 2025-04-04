@@ -137,7 +137,7 @@ $(document).ready(function () {
             data: { action: "loadClaimsDistribution" },
             dataType: 'json',
             success: function (data) {
-                console.log("Répartition des réclamations chargée avec succès:", data);
+                // console.log("Répartition des réclamations chargée avec succès:", data);
     
                 if (data && typeof data === 'object') {
                     // Extract values while ignoring non-reclamation properties
@@ -202,4 +202,49 @@ $(document).ready(function () {
     loadRecentReclamations();
     loadClaimsDistribution();
     loadGlobalConsumption();
+
+
+    $('#reclamationsModal').on('shown.bs.modal', function () {
+        $.ajax({
+            url: '/Traitement/Utilisateurs.php',
+            type: 'GET',
+            data: { action: "loadAllReclamations" }, // à adapter selon ton backend
+            dataType: 'json',
+            success: function (data) {
+                const tbody = $('#allReclamationsTable tbody');
+                tbody.empty();
+            
+                if (data.success) {
+                    tbody.html(data.html);
+                } else {
+                    tbody.html('<tr><td colspan="7">Aucune réclamation trouvée</td></tr>');
+                }
+            },
+            
+            error: function (xhr, status, error) {
+                console.error("Erreur AJAX:", error);
+            }
+        });
+    });
+    
+    // Fonctions utilitaires pour style et texte
+    function getBadgeClass(statut) {
+        switch (statut.toLowerCase()) {
+            case 'soumise': return 'bg-danger';
+            case 'en cours': return 'bg-warning';
+            case 'resolue': return 'bg-success';
+            default: return 'bg-secondary';
+        }
+    }
+    
+    function getActionLabel(statut) {
+        switch (statut.toLowerCase()) {
+            case 'soumise': return 'Traiter';
+            case 'en cours': return 'Finaliser';
+            case 'resolue': return 'Voir';
+            default: return 'Voir';
+        }
+    }
+    
+    
 });

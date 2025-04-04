@@ -165,6 +165,56 @@ function getAnomaliesHTML(){
         JOIN consommation co ON c.id_client = co.client_id
         JOIN consommationannuelle ca ON c.id_client = ca.client_id
         WHERE ABS((co.valeur_compteur - ca.consommation_totale) / ca.consommation_totale) > 0.5
+        ORDER BY r.date_soumission DESC LIMIT 5;
+        ";
+
+    $stmt = $conn->query($sql);
+    $anomalies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $html = "";
+    foreach ($anomalies as $anomalie) {
+        $ecart = round($anomalie['ecart']);
+        $badgeClass = $ecart > 0 ? "bg-danger" : "bg-warning";
+        $sign = $ecart > 0 ? "+" : "";
+
+        // S'assurer que les valeurs nulles ou 0 soient bien gérées
+        $description = !empty($anomalie['description']) ? $anomalie['description'] : 'Aucune description fournie';
+        $consommation = !empty($anomalie['consommation']) ? $anomalie['consommation'] : 0;
+        $consommationMoyenne = !empty($anomalie['consommation_moyenne']) ? $anomalie['consommation_moyenne'] : 0;
+
+        $html .= "
+            <tr>
+                <td>CL-{$anomalie['id_client']}</td>
+                <td>{$anomalie['nom']} {$anomalie['prenom']}</td>
+                <td>" . date("d/m/Y", strtotime($anomalie['date_releve'])) . "</td>
+                <td>{$consommation} kWh</td>
+                <td><span class='badge $badgeClass'>{$sign}{$ecart}%</span></td>
+                <td>
+                    <button class='btn btn-sm btn-primary'>Vérifier</button>
+                    <button class='btn btn-sm btn-outline-success'>Valider</button>
+                </td>
+            </tr>
+        ";
+    }
+    
+    return $html;
+}
+function getAllAnomaliesHTML(){
+    $conn = connexion();
+    $sql = "SELECT 
+            c.id_client, 
+            u.nom, 
+            u.prenom, 
+            r.date_soumission AS date_releve, 
+            c.numero_compteur, 
+            r.description, 
+            (co.valeur_compteur - ca.consommation_totale) / ca.consommation_totale * 100 AS ecart
+        FROM reclamation r
+        JOIN client c ON r.client_id = c.id_client
+        JOIN utilisateur u ON c.id_client = u.id_utilisateur
+        JOIN consommation co ON c.id_client = co.client_id
+        JOIN consommationannuelle ca ON c.id_client = ca.client_id
+        WHERE ABS((co.valeur_compteur - ca.consommation_totale) / ca.consommation_totale) > 0.5
         ORDER BY r.date_soumission DESC;
         ";
 
@@ -200,38 +250,62 @@ function getAnomaliesHTML(){
     return $html;
 }
 function getRecentReclamationsHTML() {
-    $conn = connexion(); // Assuming you have a function for DB connection.
-    
-    // Corrected SQL query to join reclamation with utilisateur instead of client for names.
-    $sql = "SELECT r.id_reclamation, u.nom, u.prenom, r.date_soumission, r.type_reclamation, r.statut 
-            FROM reclamation r 
-            JOIN utilisateur u ON r.client_id = u.id_utilisateur 
-            WHERE r.statut = 'non traité' 
-            ORDER BY r.date_soumission DESC 
-            LIMIT 5";
-    
+    $conn = connexion(); // Connexion à la base de données
+
+    $sql = "SELECT 
+            r.id_reclamation,
+            u.nom, 
+            u.prenom, 
+            r.date_soumission,
+            r.type_reclamation,
+            r.statut,
+            f.id_facture
+        FROM reclamation r
+        JOIN utilisateur u ON r.client_id = u.id_utilisateur
+        LEFT JOIN (
+            SELECT f1.*
+            FROM facture f1
+            INNER JOIN (
+                SELECT client_id, MAX(date_emission) AS max_date
+                FROM facture
+                GROUP BY client_id
+            ) f2 ON f1.client_id = f2.client_id AND f1.date_emission = f2.max_date
+        ) f ON f.client_id = r.client_id
+        WHERE r.statut IN ('soumise', 'en cours')
+        ORDER BY r.date_soumission DESC
+        LIMIT 5;
+        ";
+
     $stmt = $conn->query($sql);
     $reclamations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $html = "";
     foreach ($reclamations as $reclamation) {
-        // Generate HTML content for each reclamation
+        $buttons = "<button class='btn btn-sm btn-primary'>Voir</button>";
+
+        if ($reclamation['statut'] == 'soumise') {
+            $buttons .= " <button class='btn btn-sm btn-success'>Traiter</button>";
+        } elseif ($reclamation['statut'] == 'en cours') {
+            $buttons .= " <button class='btn btn-sm btn-warning'>Finaliser</button>";
+        }
+
         $html .= "
             <tr>
                 <td>{$reclamation['id_reclamation']}</td>
                 <td>{$reclamation['nom']} {$reclamation['prenom']}</td>
-                <td>" . date("d/m/Y", strtotime($reclamation['date_soumission'])) . "</td>
                 <td>{$reclamation['type_reclamation']}</td>
-                <td>{$reclamation['statut']}</td>
+                <td>" . date("d/m/Y", strtotime($reclamation['date_soumission'])) . "</td>
+                <td>" . ($reclamation['id_facture'] ?? 'N/A') . "</td>
+                <td><span class='badge bg-" . ($reclamation['statut'] == 'soumise' ? "danger" : "warning") . "'>{$reclamation['statut']}</span></td>
+                <td>{$buttons}</td>
             </tr>
         ";
     }
-    
-    // If there are no reclamations, add a message indicating that.
+
     if (empty($reclamations)) {
         $html .= "
             <tr>
-                <td colspan='5' class='text-center'>Aucune réclamation non traitée trouvée.</td>
+                <td colspan='7' class='text-center'>Aucune réclamation non traitée trouvée.</td>
             </tr>
         ";
     }
@@ -239,6 +313,79 @@ function getRecentReclamationsHTML() {
     return $html;
 }
 
+
+function getAllReclamationsHTML() {
+    $conn = connexion(); // Connexion à la base de données
+
+    $sql = "SELECT 
+            r.id_reclamation,
+            u.nom, 
+            u.prenom, 
+            r.date_soumission,
+            r.type_reclamation,
+            r.statut,
+            f.id_facture
+        FROM reclamation r
+        JOIN utilisateur u ON r.client_id = u.id_utilisateur
+        LEFT JOIN (
+            SELECT f1.*
+            FROM facture f1
+            INNER JOIN (
+                SELECT client_id, MAX(date_emission) AS max_date
+                FROM facture
+                GROUP BY client_id
+            ) f2 ON f1.client_id = f2.client_id AND f1.date_emission = f2.max_date
+        ) f ON f.client_id = r.client_id
+        WHERE r.statut IN ('soumise', 'en cours')
+        ORDER BY r.date_soumission DESC
+        ";
+
+    $stmt = $conn->query($sql);
+    $reclamations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $html = "";
+    foreach ($reclamations as $reclamation) {
+        $buttons = "<button class='btn btn-sm btn-primary'>Voir</button>";
+
+        if ($reclamation['statut'] == 'soumise') {
+            $buttons .= " <button class='btn btn-sm btn-success'>Traiter</button>";
+        } elseif ($reclamation['statut'] == 'en cours') {
+            $buttons .= " <button class='btn btn-sm btn-warning'>Finaliser</button>";
+        }
+
+        $html .= "
+            <tr>
+                <td>{$reclamation['id_reclamation']}</td>
+                <td>{$reclamation['nom']} {$reclamation['prenom']}</td>
+                <td>{$reclamation['type_reclamation']}</td>
+                <td>" . date("d/m/Y", strtotime($reclamation['date_soumission'])) . "</td>
+                <td>" . ($reclamation['id_facture'] ?? 'N/A') . "</td>
+                <td><span class='badge bg-" . ($reclamation['statut'] == 'soumise' ? "danger" : "warning") . "'>{$reclamation['statut']}</span></td>
+                <td>{$buttons}</td>
+            </tr>
+        ";
+    }
+
+    if (empty($reclamations)) {
+        $html .= "
+            <tr>
+                <td colspan='7' class='text-center'>Aucune réclamation non traitée trouvée.</td>
+            </tr>
+        ";
+    }
+
+    return $html;
+}
+function getReclamationById($id_reclamation) {
+    $conn = connexion();
+    $sql = "SELECT r.id_reclamation, u.nom, u.prenom, r.date_soumission, r.type_reclamation, r.description, r.statut 
+            FROM reclamation r 
+            JOIN utilisateur u ON r.client_id = u.id_utilisateur 
+            WHERE r.id_reclamation = :id_reclamation";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['id_reclamation' => $id_reclamation]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 function getGlobalConsumptionData(){
     $conn = connexion();
