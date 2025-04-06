@@ -1,6 +1,4 @@
-// alert("Hey");
 document.addEventListener('DOMContentLoaded', function() {
-
     document.getElementById('uploadForm').addEventListener('submit', function(event) {
         event.preventDefault();
         
@@ -20,13 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
             statusDiv.innerHTML = '<p class="text-danger">Seuls les fichiers .txt sont acceptés.</p>';
             return;
         }
-    
-        fetch('upload.php', {
+    // alert("Heu");
+    // console.log(formData.get('fileUpload'));
+        fetch('/Traitement/Utilisateurs.php', {
             method: 'POST',
             body: formData
         })
+        
         .then(response => response.json())
         .then(data => {
+            // alert("Heu");
             if (data.success) {
                 statusDiv.innerHTML = `<p class="text-success">${data.message}</p>`;
             } else {
@@ -34,9 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
+            
             statusDiv.innerHTML = '<p class="text-danger">Erreur lors du téléversement du fichier.</p>';
+            
         });
     });
-    
-
 });

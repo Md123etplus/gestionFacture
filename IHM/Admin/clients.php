@@ -250,22 +250,21 @@
                     </thead>
                     <tbody>
                     <?php
-                if ($clients->num_rows > 0) {
-                    while ($row = $clients->fetch_assoc()) {
+                if (count($clients) > 0) {
+                    foreach ($clients as $row) {
                         echo "<tr>
                                 <td>{$row['id_client']}</td>
                                 <td>{$row['numero_compteur']}</td>
                                 <td>{$row['adresse_installation']}</td>
                                 <td>
-                                        <div class='action-buttons'>
-                        <button class='btn-edit' onclick='editClient({$row['id_client']})'>
-                            <i class='fas fa-edit'></i> Modifier
-                        </button>
-                    </div>
-                </td>
-              </tr>";
-    }  // ✅ Ajout de la parenthèse fermante ici
-} else {
+                                    <div class='action-buttons'>
+                                        <button class='btn-edit' onclick='editClient({$row['id_client']})'>
+                                            <i class='fas fa-edit'></i> Modifier
+                                        </button>
+                                    </div>
+                                </td>
+                              </tr>";
+                    }} else {
                     echo "<tr><td colspan='6' class='text-center'>Aucune réclamation trouvée.</td></tr>";
                 }
                 ?>

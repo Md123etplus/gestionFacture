@@ -29,10 +29,13 @@ function add_client($nom, $prenom, $email, $mot_de_passe, $type, $numero_compteu
 }
 
 function get_all_clients() {
-    $conn = connexion();
+    $conn = connexion(); // Assuming `connexion` is your PDO connection function
     $sql = "SELECT id_client, numero_compteur, adresse_installation FROM client";
-    return $conn->query($sql)->fetchAll();
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch the results as an associative array
 }
+
 
 function get_client_by_id($id_client) {
     $conn = connexion();
@@ -137,18 +140,22 @@ function getStatistics(){
     $conn = connexion();
     $sql = "SELECT 
             COUNT(DISTINCT c.id_client) AS total_clients,  -- Total des clients
-            IFNULL(SUM(co.consommation_totale), 0) AS total_consommation,  -- Total consommation (basé sur la consommation annuelle)
-            COUNT(DISTINCT f.id_facture) AS factures_impayees,  -- Nombre de factures impayées
-            IFNULL(SUM(f.montant_ttc), 0) AS montant_impaye,  -- Montant total impayé
-            COUNT(DISTINCT r.id_reclamation) AS reclamations_non_traitees  -- Nombre de réclamations non traitées
+            IFNULL(SUM(co.consommation_totale), 0) AS total_consommation_annuelle,  -- Total consommation (basé sur la consommation annuelle)
+            IFNULL(SUM(cons.valeur_compteur), 0) AS total_consommation_mensuelle,  -- Total consommation (basé sur la consommation mensuelle)
+            COUNT(DISTINCT CASE WHEN f.statut = 'impayée' THEN f.id_facture END) AS factures_impayees,  -- Nombre de factures impayées
+            IFNULL(SUM(CASE WHEN f.statut = 'impayée' THEN f.montant_ttc END), 0) AS montant_impaye,  -- Montant total impayé
+            COUNT(DISTINCT CASE WHEN r.statut in ('soumise','en cours') THEN r.id_reclamation END) AS reclamations_non_traitees  -- Nombre de réclamations non résolues
         FROM 
             client c
         LEFT JOIN consommationannuelle co ON c.id_client = co.client_id  -- Jointure sur la consommation annuelle
-        LEFT JOIN facture f ON c.id_client = f.client_id AND f.statut = 'impayée'  -- Jointure sur les factures impayées
-        LEFT JOIN reclamation r ON c.id_client = r.client_id AND r.statut != 'résolue'  -- Jointure sur les réclamations non résolues
+        LEFT JOIN consommation cons ON c.id_client = cons.client_id  -- Jointure sur la consommation mensuelle
+        LEFT JOIN facture f ON c.id_client = f.client_id  -- Jointure sur les factures
+        LEFT JOIN reclamation r ON c.id_client = r.client_id  -- Jointure sur les réclamations
         ";
     return $conn->query($sql)->fetch(PDO::FETCH_ASSOC);
 }
+
+
 function getAnomaliesHTML(){
     $conn = connexion();
     $sql = "SELECT 
@@ -281,13 +288,14 @@ function getRecentReclamationsHTML() {
 
     $html = "";
     foreach ($reclamations as $reclamation) {
-        $buttons = "<button class='btn btn-sm btn-primary'>Voir</button>";
+        $buttons = "<button class='btn btn-sm btn-primary btn-voir' data-id='{$reclamation['id_reclamation']}'>Voir</button>";
 
         if ($reclamation['statut'] == 'soumise') {
-            $buttons .= " <button class='btn btn-sm btn-success'>Traiter</button>";
+            $buttons .= " <button class='btn btn-sm btn-success btn-traiter' data-id='{$reclamation['id_reclamation']}'>Traiter</button>";
         } elseif ($reclamation['statut'] == 'en cours') {
-            $buttons .= " <button class='btn btn-sm btn-warning'>Finaliser</button>";
+            $buttons .= " <button class='btn btn-sm btn-warning btn-finaliser' data-id='{$reclamation['id_reclamation']}'>Finaliser</button>";
         }
+
 
         $html .= "
             <tr>
@@ -345,13 +353,14 @@ function getAllReclamationsHTML() {
 
     $html = "";
     foreach ($reclamations as $reclamation) {
-        $buttons = "<button class='btn btn-sm btn-primary'>Voir</button>";
+        $buttons = "<button class='btn btn-sm btn-primary btn-voir' data-id='{$reclamation['id_reclamation']}'>Voir</button>";
 
         if ($reclamation['statut'] == 'soumise') {
-            $buttons .= " <button class='btn btn-sm btn-success'>Traiter</button>";
+            $buttons .= " <button class='btn btn-sm btn-success btn-traiter' data-id='{$reclamation['id_reclamation']}'>Traiter</button>";
         } elseif ($reclamation['statut'] == 'en cours') {
-            $buttons .= " <button class='btn btn-sm btn-warning'>Finaliser</button>";
+            $buttons .= " <button class='btn btn-sm btn-warning btn-finaliser' data-id='{$reclamation['id_reclamation']}'>Finaliser</button>";
         }
+
 
         $html .= "
             <tr>
@@ -400,5 +409,16 @@ function getClaimsDistributionData(){
     $sql = "SELECT type_reclamation, COUNT(*) as count FROM reclamation GROUP BY type_reclamation";
     $stmt = $conn->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);  
+}
+function updateReclamationStatut($id, $nouveauStatut) {
+    $conn = connexion();
+    $stmt = $conn->prepare("UPDATE reclamation SET statut = ? WHERE id_reclamation = ?");
+    return $stmt->execute([$nouveauStatut, $id]);
+}
+function insererConsommationAnnuelle($client_id, $annee, $consommation_totale, $date_generation, $id_agent) {
+    $conn = connexion();
+    $stmt = $conn->prepare("INSERT INTO consommationannuelle (client_id, annee, consommation_totale, date_generation, id_agent) 
+                            VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$client_id, $annee, $consommation_totale, $date_generation, $id_agent]);
 }
 ?>

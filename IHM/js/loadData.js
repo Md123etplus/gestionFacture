@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    alert("Hey");
+    // alert("Hey");
 
     // Charger les statistiques du tableau de bord
     function loadStatistics() {
@@ -10,7 +10,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    // console.log("Statistiques chargées avec succès:", data);
+                    console.log("Statistiques chargées avec succès:", data);
                     // console.log(data);
     
                     // Mise à jour du total des clients
@@ -18,7 +18,7 @@ $(document).ready(function () {
                     $(".card:has(.card-title:contains('Total Clients')) .display-4").text(totalClients);
     
                     // Mise à jour de la consommation totale
-                    var totalConsommation = data.total_consommation !== null && data.total_consommation !== undefined ? data.total_consommation : 0;
+                    var totalConsommation = data.total_consommation_mensuelle !== null && data.total_consommation_mensuelle !== undefined ? data.total_consommation_mensuelle: 0;
                     $(".card:has(.card-title:contains('Consommation Totale')) .display-4").text(totalConsommation + " kWh");
     
                     // Mise à jour des factures impayées
@@ -246,5 +246,100 @@ $(document).ready(function () {
         }
     }
     
+    //pour les traitements dans reclamations
+    $(document).ready(function () {
+        // Voir
+        $(document).on('click', '.btn-voir', function () {
+            const id = $(this).data('id');
+            $.post('/Traitement/Utilisateurs.php', {
+                action: 'voirReclamation',
+                id_reclamation: id
+            }, function (response) {
+                if (response.success) {
+                    $('#modalVoirBody').html(response.html);
+                    $('#modalVoir').modal('show');
+                } else {
+                    alert("Erreur lors du chargement des détails.");
+                }
+            }, 'json');
+        });
     
+        // Traiter
+        $(document).on('click', '.btn-traiter', function () {
+            const id = $(this).data('id');
+            $.post('/Traitement/Utilisateurs.php', {
+                action: 'traiterReclamation',
+                id_reclamation: id
+            }, function (response) {
+                if (response.success) {
+                    alert("Réclamation mise en cours de traitement.");
+                    location.reload();
+                } else {
+                    alert("Erreur lors du traitement.");
+                }
+            }, 'json');
+        });
+    
+        // Finaliser
+        $(document).on('click', '.btn-finaliser', function () {
+            const id = $(this).data('id');
+            if (confirm("Es-tu sûr de vouloir finaliser cette réclamation ?")) {
+                $.post('/Traitement/Utilisateurs.php', {
+                    action: 'finaliserReclamation',
+                    id_reclamation: id
+                }, function (response) {
+                    if (response.success) {
+                        alert("Réclamation finalisée avec succès.");
+                        location.reload();
+                    } else {
+                        alert("Erreur lors de la finalisation.");
+                    }
+                }, 'json');
+            }
+        });
+    });
+    /////////////////////
+    // document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    //     event.preventDefault();
+
+    //     const fileInput = document.getElementById('fileUpload');
+    //     const statusDiv = document.getElementById('uploadStatus');
+
+    //     if (fileInput.files.length === 0) {
+    //         statusDiv.innerHTML = '<p class="text-danger">Veuillez sélectionner un fichier.</p>';
+    //         return;
+    //     }
+
+    //     const file = fileInput.files[0];
+
+    //     if (!file.name.endsWith('.txt')) {
+    //         statusDiv.innerHTML = '<p class="text-danger">Seuls les fichiers .txt sont acceptés.</p>';
+    //         return;
+    //     }
+
+    //     const formData = new FormData();
+    //     formData.append('fileUpload', file);
+
+    //     // Use jQuery.ajax() to send the file
+    //     $.ajax({
+    //         url: '/Traitement/Utilisateurs.php',
+    //         type: 'POST',
+    //         data: formData,
+    //         processData: false, // Prevent jQuery from processing the data
+    //         contentType: false, // Prevent jQuery from setting contentType header
+    //         success: function(response) {
+    //             const data = JSON.parse(response); // Parse the JSON response
+    //             if (data.success) {
+    //                 statusDiv.innerHTML = `<p class="text-success">${data.message}</p>`;
+    //             } else {
+    //                 statusDiv.innerHTML = `<p class="text-danger">${data.message}</p>`;
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error('Error during file upload:', status, error);
+    //             statusDiv.innerHTML = '<p class="text-danger">Erreur lors du téléversement du fichier.</p>';
+    //         }
+    //     });
+    // });
 });
+   

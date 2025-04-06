@@ -34,6 +34,7 @@
       <?php include('dashboard/modal-upload.php') ?>
       <?php include('dashboard/modal-reclamations.php') ?>
       <?php include('dashboard/modal-anomalies.php')?>
+      <?php include('dashboard/modal-voirReclamation.php') ?>
     </section>
   <!-- Footer Section -->
   <?php include('footer.php') ?>
@@ -44,7 +45,7 @@
   <script src="/IHM/js/upload.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- <script src="/IHM/js/custom.js"></script> -->
-  <!-- <script src="js/upload.js"></script> -->
+  <!-- <script src="/IHM/js/upload.js"></script> -->
   <!-- Bootstrap JS + Popper.js -->
   <script src="/IHM/js/loadData.js"></script>
 

@@ -8,8 +8,8 @@
       <div class="modal-body">
         <form id="uploadForm" enctype="multipart/form-data">
           <div class="mb-3">
-            <label for="fileUpload" class="form-label">Sélectionnez un fichier (CSV, Excel) :</label>
-            <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".csv,.xlsx,.xls">
+            <label for="fileUpload" class="form-label">Sélectionnez un fichier (Txt) :</label>
+            <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".csv,.xlsx,.xls,.txt">
           </div>
           <button type="submit" class="btn btn-primary">Envoyer</button>
           <div id="uploadStatus" class="mt-3"></div>

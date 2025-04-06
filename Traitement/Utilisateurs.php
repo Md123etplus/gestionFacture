@@ -1,6 +1,10 @@
 <?php
 define('ROOT', str_replace('Traitement\Utilisateurs.php', '', $_SERVER['SCRIPT_FILENAME']));
 require_once ROOT . 'BD\Utilisateur.php';
+// if(isset($_FILES['fileUpload'])){
+//     var_dump($_FILES);
+// }
+
 if (empty($_POST)&& empty($_GET)) {
     // $users = getAllUsers();
     // $_SESSION['users'] = $users;
@@ -257,6 +261,71 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         include(ROOT.'IHM\Admin\consommation.php');
     }
 
+}else if (isset($_POST['action'])) {
+    $action = $_POST['action'];
+
+    switch ($action) {
+        case "voirReclamation":
+            $id = $_POST['id_reclamation'];
+            $rec = getReclamationById($id);
+
+            if ($rec) {
+                ob_start();
+                ?>
+                <p><strong>Type :</strong> <?= htmlspecialchars($rec['type_reclamation']) ?></p>
+                <p><strong>Description :</strong> <?= nl2br(htmlspecialchars($rec['description'])) ?></p>
+                <p><strong>Date de soumission :</strong> <?= date("d/m/Y", strtotime($rec['date_soumission'])) ?></p>
+                <?php
+                $html = ob_get_clean();
+                echo json_encode(["success" => true, "html" => $html]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Réclamation introuvable."]);
+            }
+            exit();
+
+        case "traiterReclamation":
+            $id = $_POST['id_reclamation'];
+            $success = updateReclamationStatut($id, 'en cours');
+            echo json_encode(["success" => $success]);
+            exit();
+
+        case "finaliserReclamation":
+            $id = $_POST['id_reclamation'];
+            $success = updateReclamationStatut($id, 'résolue');
+            echo json_encode(["success" => $success]);
+            exit();
+    }
+
+}else // Vérification du fichier et insertion
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileUpload'])) {
+    // var_dump($_FILES); 
+    echo "File received";
+    $file = $_FILES['fileUpload']['tmp_name'];
+    
+    if (($handle = fopen($file, 'r')) !== false) {
+        // Lire la première ligne (en-têtes)
+        fgetcsv($handle, 1000, ';');
+        
+        // Traiter les lignes du fichier
+        while (($data = fgetcsv($handle, 1000, ';')) !== false) {
+            // Récupérer les données
+            $client_id = $data[0];
+            $annee = $data[1];
+            $consommation_totale = $data[2];
+            $date_generation = $data[3];
+            $id_agent = $data[4];
+            
+            // Insérer dans la base de données
+            insererConsommationAnnuelle($client_id, $annee, $consommation_totale, $date_generation, $id_agent);
+        }
+        
+        fclose($handle);
+        
+        // Retourner une réponse JSON
+        echo json_encode(["success" => true, "message" => "Les données ont été insérées avec succès."]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Erreur lors de l'ouverture du fichier."]);
+    }
 }
 else{
     echo "Action non reconnue";
