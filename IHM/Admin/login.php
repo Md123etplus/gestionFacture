@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion - VoltForce</title>
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/IHM/css/bootstrap.css">
+  <link rel="stylesheet" href="/IHM/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -83,8 +83,8 @@
     </div>
   </footer>
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
+  <script src="/IHM/js/jquery-3.4.1.min.js"></script>
+  <script src="/IHM/js/bootstrap.js"></script>
+  <script src="/IHM/js/custom.js"></script>
 </body>
 </html>

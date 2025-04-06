@@ -52,7 +52,7 @@ $pdf->DetailsFacture([
 ]);
 
 // Génération du PDF
-$filename = "factures/facture_client_{$id_client}.pdf";
+$filename = "../IHM/Admin/factures/facture_client_{$id_client}.pdf";
 $pdf->Output('F', $filename);
 $pdf->Output('I', "Facture_Client_{$id_client}.pdf");
 ?>

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usermdp = $user['mot_de_passe'];
         $usertype = $user['type'];
 
-        if ($user && $password === $usermdp) {
+        if ($user && password_verify($password, $usermdp)) { //$password === $usermdp
             $_SESSION['user_id'] = $user['id_utilisateur'];
             $_SESSION['user_type'] = $usertype;
             $_SESSION['user_name'] = $user['prenom'] . ' ' . $user['nom'];

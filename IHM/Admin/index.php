@@ -1,3 +1,12 @@
+<?php
+  session_start();
+
+  if (!isset($_SESSION['id_utilisateur'])) {
+    header('Location: /IHM/Admin/login.php');
+    exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

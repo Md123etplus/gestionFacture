@@ -3,7 +3,7 @@ require_once('fpdf/fpdf.php');
 
 class FactureElectricite extends FPDF {
     function Header() {
-        $this->Image('images/electricite.png', 10, 6, 30);
+        $this->Image('../IHM/Admin/images/electricite.png', 10, 6, 30);
         $this->SetFont('Arial', 'B', 18);
         $this->SetTextColor(255, 102, 0);
         $this->Cell(0, 10, iconv('UTF-8', 'ISO-8859-1//TRANSLIT', 'VoltForce'), 0, 1, 'R');

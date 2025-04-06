@@ -29,7 +29,7 @@ function getAllFournisseurs() {
 
 // UPDATE - Update supplier information
 function updateFournisseur($id, $departement) {
-    $pdo = getConnexion();
+    $pdo = Connexion();
     $stmt = $pdo->prepare("UPDATE fournisseur 
                           SET departement = ? 
                           WHERE id_fournisseur = ?");
@@ -38,7 +38,7 @@ function updateFournisseur($id, $departement) {
 
 // DELETE - Remove supplier
 function deleteFournisseur($id) {
-    $pdo = getConnexion();
+    $pdo = Connexion();
     $stmt = $pdo->prepare("DELETE FROM fournisseur 
                           WHERE id_fournisseur = ?");
     return $stmt->execute([$id]);

@@ -107,13 +107,13 @@ require_once '../../Traitement/Client/saisir-consomation.php';
                                                name="valeur_compteur" required
                                                value="<?= $last_consumption ? htmlspecialchars($last_consumption['valeur_compteur'] + 1) : '' ?>">
                                         <?php if ($last_consumption): ?>
-                                        <div class="form-text">Dernière valeur enregistrée : <?= htmlspecialchars($last_consumption['valeur_compteur']) ?> kWh</div>
+                                        <div class="form-text">Dernière valeur enregistrée (Du dernier mois) : <?= htmlspecialchars($last_consumption['valeur_compteur']) ?> kWh</div>
                                         <?php endif; ?>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="photo_compteur" class="form-label">Photo du compteur (optionnel)</label>
-                                        <input type="file" class="form-control" id="photo_compteur" name="photo_compteur" accept="image/*">
+                                        <label for="photo_compteur" class="form-label">Photo du compteur</label>
+                                        <input type="file" class="form-control" id="photo_compteur" name="photo_compteur" accept="image/*" required>
                                         <div class="form-text">Formats acceptés : JPG, PNG, GIF (max 2MB)</div>
                                     </div>
                                     
@@ -144,9 +144,9 @@ require_once '../../Traitement/Client/saisir-consomation.php';
                                 
                                 <?php if ($last_consumption && !empty($last_consumption['photo_compteur'])): ?>
                                 <div class="mt-3">
-                                    <h6>Dernière photo envoyée :</h6>
-                                    <img src="<?= htmlspecialchars($last_consumption['photo_compteur']) ?>" 
-                                         alt="Dernière photo du compteur" 
+                                    <h6>Dernière photo envoyée (Du dernier mois) :</h6>
+                                    <img src="<?= '../../'.htmlspecialchars($last_consumption['photo_compteur']) ?>" 
+                                         alt="Dernière photo du compteur (Du dernier mois)" 
                                          class="img-thumbnail mt-2" style="max-height: 150px;">
                                 </div>
                                 <?php endif; ?>
@@ -175,6 +175,35 @@ require_once '../../Traitement/Client/saisir-consomation.php';
     <script>
         // Afficher l'année actuelle dans le footer
         document.getElementById('displayDateYear').textContent = new Date().getFullYear();
+        
+        // const day = new Date().getDate();
+        // if (day < 18) {
+        //     document.querySelector('button[type="submit"]').disabled = true;
+        // }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const day = today.getDate();
+
+        if (day < 18) {
+            // Sélectionner tous les champs du formulaire
+            const formElements = document.querySelectorAll('form input, form button, form select, form textarea');
+            formElements.forEach(el => {
+                el.disabled = true;
+            });
+
+            // Ajouter un message d'information
+            const message = document.createElement('div');
+            message.className = 'alert alert-warning mt-3';
+            message.innerHTML = `
+                <strong>Saisie temporairement désactivée.</strong><br>
+                Vous pourrez saisir votre consommation à partir du <strong>18</strong> de ce mois.
+            `;
+
+            const form = document.querySelector('form');
+            form.parentNode.insertBefore(message, form);
+        }
+    });
     </script>
 </body>
 </html>

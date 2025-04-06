@@ -71,28 +71,55 @@ else if(isset($_GET['action'])){
 
         case "editClient":
             // // Vérifier si un ID client est fourni
-            // if (!isset($_GET['id']) || empty($_GET['id'])) {
-            //     $errors = "ID client non valide.";
-            //     include(ROOT.'IHM\Admin\clients.php');
-            // }
-            // else{
-            //     $id_client = intval($_GET['id']); // Sécuriser l'ID
-            //     $result = get_client_by_id($id_client);
-    
-            //     if($result->num_rows == 0){
-            //         $errors = "Client non trouvé";  
-            //         $clients = get_all_clients();
-            //         include(ROOT.'IHM\Admin\clients.php');             
-            //     }
-            //     else{
-            //         $client = $result->fetch_assoc();
-            //         header('Location: ');
-            //         include(ROOT.'IHM\Admin\clients.php');
-            //     }
-            // }         
-            // break;
+            if (!isset($_GET['id']) || empty($_GET['id'])) {
+                $errors = "ID client non valide.";
+                include(ROOT.'IHM\Admin\clients.php');
+            }
+            else{
+                if (!isset($_GET['id']) || empty($_GET['id'])) {
+                    $errors = "ID client non valide.";
+                    include(ROOT . 'IHM\Admin\clients.php');
+                } else {
+                    $id_client = intval($_GET['id']); // Sécuriser l'ID
+                    $client = get_client_by_id($id_client);
+                
+                    if (!$client) {
+                        $errors = "Client non trouvé";  
+                        $clients = get_all_clients();
+                        include(ROOT . 'IHM\Admin\clients.php');             
+                    } else {
+                        // Le client a été trouvé
+                        // Tu peux faire une redirection ou afficher ses infos
+                        // header('Location: ...'); (à adapter si nécessaire)
+                        include(ROOT . 'IHM\Admin\edit_client.php');
+                    }
+                }
+            }         
+            break;
 
         case "reclamation":
+            $reclamations = get_all_reclamation();
+
+            // header('Location: ');
+            include(ROOT.'IHM\Admin\reclamation.php');
+            break;
+        
+        case "traiter_reclamation":
+            // Vérifier si l'ID de réclamation est bien passé
+            if (!isset($_GET['id']) || empty($_GET['id'])) {
+                $errors = "ID de réclamation invalide.";
+            }
+            else{
+                $id_reclamation = intval($_GET['id']); // Sécuriser l'ID
+                $client = update_reclamation($id_reclamation);
+
+                if(!$client)
+                    $errors = "Erreur lors du traitement!";
+                else{
+                    include(ROOT.'IHM\Admin\Traitement_reclamation.php');
+                }
+            }
+
             $reclamations = get_all_reclamation();
 
             header('Location: ');
@@ -147,7 +174,7 @@ else if(isset($_GET['action'])){
             session_destroy();
 
             // Rediriger vers la page de connexion
-            header("Location: login.php");
+            header("Location: ../IHM/Admin/login.php");
             exit();
             break;
 
@@ -203,45 +230,21 @@ else if(isset($_POST['submit_editClient'])){
         }
     }
 }
-else if(isset($_POST['traiter_reclamation'])){
-    // Vérifier si l'ID de réclamation est bien passé
-    if (!isset($_GET['id']) || empty($_GET['id'])) {
-        $errors = "ID de réclamation invalide.";
-    }
-    else{
-        $id_reclamation = intval($_GET['id']); // Sécuriser l'ID
-        $client = update_reclamation($id_reclamation);
-
-        if(!$client)
-            $errors = "Erreur lors du traitement!";
-        else{
-            include(ROOT.'IHM\Admin\Traitement_reclamation.php');
-        }
-    }
-
-    $reclamations = get_all_reclamation();
-
-    header('Location: ');
-    include(ROOT.'IHM\Admin\reclamation.php');
-
-}
 else if(isset($_POST['handle_login'])){
-    session_start();
-
     $email = trim($_POST['username']);
     $password = trim($_POST['password']);
 
     if (!empty($email) && !empty($password)) {
         $result = handle_login($email, $password);
-
         include(ROOT.'IHM\Admin\handle_login.php');
     }
     else {
         $error = "Veuillez remplir tous les champs.";
     }
     
-    header("Location: login.php?error=" . urlencode($error));
-    exit();
+    // header("Location: /IHM/Admin/login.php");
+    include(ROOT.'IHM\Admin\login.php');
+    // exit();
 }
 else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $id = $_POST['id_consommation'];

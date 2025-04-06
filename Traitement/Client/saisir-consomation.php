@@ -28,6 +28,14 @@ if (!empty($consommations)) {
 }
 
 // Traitement du formulaire
+$today = new DateTime();
+$day = (int) $today->format('d');
+
+if ($day < 18) {
+    $errors[] = "La saisie de consommation est uniquement autorisée entre le 18 et la fin du mois.";
+    return; // ou exit();
+}
+
 $errors = [];
 $success = false;
 

@@ -1,20 +1,18 @@
 <?php
 
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-    
+if ($result && is_array($result)) {
     // Vérification du mot de passe
-    // if (password_verify($password, $user['mot_de_passe'])) {
-    if ($password == $user['mot_de_passe']){
-        // Stocker les informations de l'utilisateur en session
-        $_SESSION['id_utilisateur'] = $user['id_utilisateur'];
-        $_SESSION['nom'] = $user['nom'];
-        $_SESSION['prenom'] =  $user['prenom'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['type'] = $user['type'];
-        
-        // Redirection vers la page d'accueil
-        header("Location: index.php");
+    if (password_verify($password, $result['mot_de_passe'])) {
+        session_start();
+
+        $_SESSION['id_utilisateur'] = $result['id_utilisateur'];
+        $_SESSION['nom'] = $result['nom'];
+        $_SESSION['prenom'] = $result['prenom'];
+        $_SESSION['email'] = $result['email'];
+        $_SESSION['type'] = $result['type'];
+
+        header("Location: ../IHM/Admin/index.php");
+        // include(ROOT.'IHM\Admin\index.php');
         exit();
     } else {
         $error = "Identifiants incorrects.";
@@ -22,3 +20,4 @@ if ($result->num_rows === 1) {
 } else {
     $error = "Aucun compte associé à cet email.";
 }
+

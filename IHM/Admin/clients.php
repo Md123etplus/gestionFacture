@@ -1,3 +1,11 @@
+<?php
+session_start();
+  if (!isset($_SESSION['id_utilisateur'])) {
+    header('Location: ../../IHM/Admin/login.php');
+    exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,8 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoltForce - Administration</title>
     
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/IHM/css/bootstrap.css">
+    <link rel="stylesheet" href="/IHM/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -176,50 +184,8 @@
 </head>
 <body class="hero_area">
 
-    <header class="header_section">
-      <div class="header_top">
-        <div class="container-fluid">
-          <div class="brand_nav">
-            <!-- Logo et titre de la société en haut à gauche -->
-            <div class="logo_container">
-              <a class="navbar-brand" href="admin.html">
-                <img src="images/electricite.png" alt="Logo VoltForce" class="logo">
-                <span>VoltForce - Administration</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="header_bottom">
-        <div class="container-fluid">
-          <nav class="navbar navbar-expand-lg custom_nav-container">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav">
-                <li class="nav-item ">
-                  <a class="nav-link" href="dashboard_Admin.php">Dashboard</a>
-                </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="clients.php ">Gestion Clients</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="consommation.php">Factures</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="reclamation.php">Réclamations</a>
-                </li>
-                
-                <li class="nav-item">
-                  <a class="nav-link" href="index.html">Déconnexion</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </header>
+    <!-- Header Section -->
+    <?php include('header.php') ?>
     <main>
     <?php
         if(isset($message)&& !empty($message)){
@@ -275,12 +241,20 @@
             </div>
         </div>
     </main>
-    <script src="reclamation.js"></script> 
+    <!-- Footer Section -->
+  <?php include('footer.php') ?>
+  <script src="/IHM/js/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
+  <script src="/IHM/js/custom.js"></script>
+
+  <script src="/IHM/js/upload.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/IHM/js/reclamation.js"></script> 
     <script>
         // Fonctions pour gérer les actions
         function editClient(clientId) {
             // Redirection vers la page de modification avec l'ID du client
-            window.location.href = '/IHM/Admin/edit_client.php?id=' + clientId;
+            window.location.href = '/Traitement/Utilisateurs.php?action=editClient&id=' + clientId;
         }
 
        

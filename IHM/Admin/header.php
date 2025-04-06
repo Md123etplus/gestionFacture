@@ -5,7 +5,7 @@
         <!-- Logo et titre de la société en haut à gauche -->
         <div class="logo_container">
             <a class="navbar-brand" href="admin.html">
-            <img src="images/electricite.png" alt="Logo VoltForce" class="logo">
+            <img src="/IHM/Admin/images/electricite.png" alt="Logo VoltForce" class="logo">
             <span>AMENDIS - Administration</span>
             </a>
         </div>
