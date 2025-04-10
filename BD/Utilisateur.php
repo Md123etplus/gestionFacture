@@ -306,7 +306,7 @@ function getRecentReclamationsHTML() {
         $buttons = "<button class='btn btn-sm btn-primary btn-voir' data-id='{$reclamation['id_reclamation']}'>Voir</button>";
 
         if ($reclamation['statut'] == 'soumise') {
-            $buttons .= " <button class='btn btn-sm btn-success btn-traiter' data-id='{$reclamation['id_reclamation']}'>Traiter</button>";
+            $buttons .= " <a href='/Traitement/Utilisateurs.php?action=traiter_reclamation&id={$reclamation['id_reclamation']}' class='btn btn-sm btn-warning'>Traiter</a>";
         } elseif ($reclamation['statut'] == 'en cours') {
             $buttons .= " <button class='btn btn-sm btn-warning btn-finaliser' data-id='{$reclamation['id_reclamation']}'>Finaliser</button>";
         }
@@ -371,7 +371,7 @@ function getAllReclamationsHTML() {
         $buttons = "<button class='btn btn-sm btn-primary btn-voir' data-id='{$reclamation['id_reclamation']}'>Voir</button>";
 
         if ($reclamation['statut'] == 'soumise') {
-            $buttons .= " <button class='btn btn-sm btn-success btn-traiter' data-id='{$reclamation['id_reclamation']}'>Traiter</button>";
+            $buttons .= " <a href='/Traitement/Utilisateurs.php?action=traiter_reclamation&id={$reclamation['id_reclamation']}' class='btn btn-sm btn-warning'>Traiter</a>";
         } elseif ($reclamation['statut'] == 'en cours') {
             $buttons .= " <button class='btn btn-sm btn-warning btn-finaliser' data-id='{$reclamation['id_reclamation']}'>Finaliser</button>";
         }
@@ -431,9 +431,29 @@ function updateReclamationStatut($id, $nouveauStatut) {
     return $stmt->execute([$nouveauStatut, $id]);
 }
 function insererConsommationAnnuelle($client_id, $annee, $consommation_totale, $date_generation, $id_agent) {
+    // Connexion à la base de données
     $conn = connexion();
-    $stmt = $conn->prepare("INSERT INTO consommationannuelle (client_id, annee, consommation_totale, date_generation, id_agent) 
-                            VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$client_id, $annee, $consommation_totale, $date_generation, $id_agent]);
+
+    // Préparer la requête SQL avec des paramètres
+    $sql = "INSERT INTO consommationannuelle (client_id, annee, consommation_totale, date_generation, id_agent) 
+            VALUES (:client_id, :annee, :consommation_totale, :date_generation, :id_agent)";
+    $stmt = $conn->prepare($sql);
+
+    // Lier les paramètres aux valeurs
+    $stmt->bindParam(':client_id', $client_id, PDO::PARAM_INT);
+    $stmt->bindParam(':annee', $annee, PDO::PARAM_INT);
+    $stmt->bindParam(':consommation_totale', $consommation_totale, PDO::PARAM_STR);
+    $stmt->bindParam(':date_generation', $date_generation, PDO::PARAM_STR);
+    $stmt->bindParam(':id_agent', $id_agent, PDO::PARAM_INT);
+
+    // Exécuter la requête
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        // Si une erreur se produit lors de l'exécution de la requête
+        echo "Erreur lors de l'insertion dans la base de données: " . $e->getMessage();
+        error_log('stop');
+        exit();
+    }
 }
 ?>
