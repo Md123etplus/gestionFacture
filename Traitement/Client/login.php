@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usermdp = $user['mot_de_passe'];
         $usertype = $user['type'];
 
-        if ($user && password_verify($password, $usermdp)) { //$password === $usermdp
+        if ($user && password_verify($password, $usermdp)) { //$password === $usermdp password_verify($password, $usermdp)
             $_SESSION['user_id'] = $user['id_utilisateur'];
             $_SESSION['user_type'] = $usertype;
             $_SESSION['user_name'] = $user['prenom'] . ' ' . $user['nom'];
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($usertype === 'client') {
                 header('Location: ../../IHM/Client/dashboard_finalUser.php');
             } else {
-                header('Location: ../IHM/dashboard_fournisseur.php');
+                header('Location: ../../IHM/Admin/index.php');
             }
             exit();
         } else {

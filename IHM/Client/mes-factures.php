@@ -12,7 +12,10 @@ require_once '../../Traitement/Client/mes-factures.php';
 </head>
 <body>
   <div class="hero_area">
-    <!-- Header (identique au dashboard) -->
+    <!-- Header Section -->
+    <?php
+      include("header.php");
+    ?>
     
     <section class="factures_section py-5">
       <div class="container">

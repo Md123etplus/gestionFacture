@@ -40,3 +40,28 @@ function myMap() {
     };
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 }
+
+function toggleFields() {
+    const type = document.getElementById("type").value;
+    const compteur = document.getElementById("numero_compteur");
+    const adresse = document.getElementById("adresse_installation");
+
+    const isFournisseur = type === "fournisseur";
+
+    compteur.disabled = isFournisseur;
+    adresse.disabled = isFournisseur;
+
+    // Pour ne pas envoyer ces valeurs s'ils sont désactivés
+    if (isFournisseur) {
+        compteur.removeAttribute("required");
+        adresse.removeAttribute("required");
+    } else {
+        compteur.setAttribute("required", "required");
+        adresse.setAttribute("required", "required");
+    }
+}
+
+// Exécuter une première fois si le type est déjà sélectionné
+document.addEventListener("DOMContentLoaded", () => {
+    toggleFields();
+});

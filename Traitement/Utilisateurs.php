@@ -10,7 +10,7 @@ if (empty($_POST)&& empty($_GET)) {
     // $_SESSION['users'] = $users;
     // header('Location: ');
     // include('..\IHM\utilisateur\index.php');
-    include(ROOT.'IHM\Admin\index.php');
+    include(ROOT.'IHM\Client\index.php');
     exit();
 }
 else if(isset($_GET['action'])){
@@ -154,6 +154,14 @@ else if(isset($_GET['action'])){
             $consommations = get_consommations();
             include(ROOT.'IHM\Admin\consommation.php');
             break;
+        
+        case "login":
+            include(ROOT.'IHM\Client\login.php');
+            break;
+
+        case "homeAdmin":
+            include(ROOT.'IHM\Admin\index.php');
+            exit();
 
         case "logout":
             session_start();
@@ -174,7 +182,7 @@ else if(isset($_GET['action'])){
             session_destroy();
 
             // Rediriger vers la page de connexion
-            header("Location: ../IHM/Admin/login.php");
+            header("Location: ../IHM/Client/login.php");
             exit();
             break;
 
@@ -190,22 +198,23 @@ else if(isset($_POST['add_client'])){
         $prenom = $_POST['prenom'];
         $email = $_POST['email'];
         $mot_de_passe = password_hash($_POST['mot_de_passe'], PASSWORD_DEFAULT); // Hash du mot de passe
-        $type = 'client'; // On force le type à 'client'
-        $numero_compteur = $_POST['numero_compteur'];
-        $adresse_installation = $_POST['adresse_installation'];
-
-
+    
+        $type = $_POST['type']; 
+    
+        // Par défaut, vide si fournisseur
+        $numero_compteur = ($type === 'client' && isset($_POST['numero_compteur'])) ? $_POST['numero_compteur'] : null;
+        $adresse_installation = ($type === 'client' && isset($_POST['adresse_installation'])) ? $_POST['adresse_installation'] : null;
+    
         $result = add_client($nom, $prenom, $email, $mot_de_passe, $type, $numero_compteur, $adresse_installation);
-
-        if($result){
+    
+        if ($result) {
             $clients = get_all_clients();
             include(ROOT.'IHM\Admin\clients.php');
-        }
-        else{
+        } else {
             $errors = "Erreur lors de l'ajout du client. Réessayer!";
             include(ROOT.'IHM\Admin\add_client.php');
         }
-    }
+    }    
 
 }
 else if(isset($_POST['submit_editClient'])){
@@ -243,7 +252,7 @@ else if(isset($_POST['handle_login'])){
     }
     
     // header("Location: /IHM/Admin/login.php");
-    include(ROOT.'IHM\Admin\login.php');
+    include(ROOT.'IHM\Client\login.php');
     // exit();
 }
 else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {

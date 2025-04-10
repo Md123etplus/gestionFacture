@@ -1,7 +1,7 @@
 <?php
   session_start();
 
-  if (!isset($_SESSION['id_utilisateur'])) {
+  if (!isset($_SESSION['user_id'])) {
     header('Location: ../../IHM/Admin/login.php');
     exit();
   }
@@ -130,32 +130,40 @@
           ?>
             <h2>Ajouter un Nouveau Client</h2>
             <form action="/Traitement/Utilisateurs.php" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Nom :</label>
-                <input type="text" name="nom" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Prénom :</label>
-                <input type="text" name="prenom" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email :</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Mot de passe :</label>
-                <input type="password" name="mot_de_passe" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Numéro de compteur :</label>
-                <input type="text" name="numero_compteur" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Adresse d'installation :</label>
-                <input type="text" name="adresse_installation" class="form-control" required>
-            </div>
-            <button type="submit" name="add_client" class="btn btn-primary">Ajouter</button>
-        </form>
+                <div class="mb-3">
+                    <label class="form-label">Nom :</label>
+                    <input type="text" name="nom" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Prénom :</label>
+                    <input type="text" name="prenom" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email :</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="type">Type :</label>
+                    <select name="type" id="type" class="form-control" required onchange="toggleFields()">
+                        <option value="" disabled selected>-- Sélectionnez un type --</option>
+                        <option value="client">Client</option>
+                        <option value="fournisseur">Fournisseur</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mot de passe :</label>
+                    <input type="password" name="mot_de_passe" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Numéro de compteur :</label>
+                    <input type="text" name="numero_compteur" id="numero_compteur" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Adresse d'installation :</label>
+                    <input type="text" name="adresse_installation" id="adresse_installation" class="form-control" required>
+                </div>
+                <button type="submit" name="add_client" class="btn btn-primary">Ajouter</button>
+            </form>
         </div>
     </div>
 

@@ -10,8 +10,8 @@ unset($_SESSION['login_error']);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion - VoltForce</title>
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/IHM/css/bootstrap.css">
+  <link rel="stylesheet" href="/IHM/css/style.css">
   <!-- Lien pour les icônes FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -26,7 +26,7 @@ unset($_SESSION['login_error']);
             <!-- Logo et titre de la société en haut à gauche -->
             <div class="logo_container">
               <a class="navbar-brand" href="index.php">
-                <img src="images/electricite.png" alt="Logo VoltForce" class="logo">
+                <img src="/IHM/Client/images/electricite.png" alt="Logo VoltForce" class="logo">
                 <span>VoltForce</span>
               </a>
             </div>
@@ -90,9 +90,9 @@ unset($_SESSION['login_error']);
     </div>
   </footer>
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
+  <script src="/IHM/js/jquery-3.4.1.min.js"></script>
+  <script src="/IHM/js/bootstrap.js"></script>
+  <script src="/IHMjs/custom.js"></script>
   <script>
     // Fonction pour afficher/masquer le mot de passe
     document.getElementById('togglePassword').addEventListener('click', function() {

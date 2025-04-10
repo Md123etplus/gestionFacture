@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VoltForce</title>
-  <link rel="stylesheet" href="css/bootstrap.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/IHM/css/bootstrap.css">
+  <link rel="stylesheet" href="/IHM/css/style.css">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <!-- Logo et titre de la société en haut à gauche -->
             <div class="logo_container">
               <a class="navbar-brand" href="index.php">
-                <img src="images/electricite.png" alt="Logo VoltForce" class="logo">
+                <img src="/IHM/Client/images/electricite.png" alt="Logo VoltForce" class="logo">
                 <span>VoltForce</span>
               </a>
             </div>
@@ -62,12 +62,12 @@
               <h1>Gérez vos factures d'électricité en toute simplicité</h1>
               <p>Consultez vos factures, saisissez votre consommation, et faites des réclamations en quelques clics.</p>
               <!-- Bouton "Se connecter" qui redirige vers la page de connexion -->
-              <a href="login.php" class="btn btn-primary">Se connecter</a>
+              <a href="/Traitement/Utilisateurs.php?action=login" class="btn btn-primary">Se connecter</a>
             </div>
           </div>
           <div class="col-md-6">
             <div class="img-box">
-              <img src="images/electiriciet.webp" alt="Électricité">
+              <img src="/IHM/Client/images/electiriciet.webp" alt="Électricité">
             </div>
           </div>
         </div>
@@ -87,9 +87,9 @@
     </div>
   </footer>
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
+  <script src="/IHM/js/jquery-3.4.1.min.js"></script>
+  <script src="/IHM/js/bootstrap.js"></script>
+  <script src="/IHM/js/custom.js"></script>
 </body>
 
 </html>

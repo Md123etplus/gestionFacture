@@ -11,7 +11,10 @@ if ($result && is_array($result)) {
         $_SESSION['email'] = $result['email'];
         $_SESSION['type'] = $result['type'];
 
-        header("Location: ../IHM/Admin/index.php");
+        if($result['type'] == "fournisseur")
+            header("Location: ../IHM/Admin/index.php");
+        else
+            header("Location: ../IHM/Client/dashboard_finalUser.php");
         // include(ROOT.'IHM\Admin\index.php');
         exit();
     } else {

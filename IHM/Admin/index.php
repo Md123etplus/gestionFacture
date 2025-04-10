@@ -1,8 +1,8 @@
 <?php
   session_start();
 
-  if (!isset($_SESSION['id_utilisateur'])) {
-    header('Location: /IHM/Admin/login.php');
+  if (!isset($_SESSION['user_id'])) {
+    header('Location: ../../IHM/Client/login.php');
     exit();
   }
 ?>

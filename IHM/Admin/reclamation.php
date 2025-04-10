@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if (!isset($_SESSION['id_utilisateur'])) {
+  if (!isset($_SESSION['user_id'])) {
     header('Location: ../../IHM/Admin/login.php');
     exit();
   }

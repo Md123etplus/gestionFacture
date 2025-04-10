@@ -48,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "La valeur du compteur est obligatoire";
     } elseif (!is_numeric($valeur_compteur)) {
         $errors[] = "La valeur du compteur doit être un nombre";
-    } elseif ($last_consumption && $valeur_compteur < $last_consumption['valeur_compteur']) {
-        $errors[] = "La nouvelle valeur ne peut pas être inférieure à la précédente (" . $last_consumption['valeur_compteur'] . ")";
-    }
+    } //elseif ($last_consumption && $valeur_compteur < $last_consumption['valeur_compteur']) {
+    //     $errors[] = "La nouvelle valeur ne peut pas être inférieure à la précédente (" . $last_consumption['valeur_compteur'] . ")";
+    // }
 
     // Traitement de l'image
     $photo_path = null;
@@ -63,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($photo_compteur['size'] > $max_size) {
             $errors[] = "La taille du fichier dépasse la limite autorisée (2MB)";
         } else {
-            $upload_dir = '../../uploads/compteurs/';
+            // $upload_dir = '../../uploads/compteurs/';
+            $upload_dir = '../Admin/photos/';
             if (!file_exists($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }
@@ -77,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $photo_path = null;
             } else {
                 // Pour l'affichage, on garde seulement le chemin relatif
-                $photo_path = 'uploads/compteurs/' . $filename;
+                $photo_path = 'Admin/photos/' . $filename;
             }
         }
     }

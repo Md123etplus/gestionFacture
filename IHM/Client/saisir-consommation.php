@@ -15,51 +15,9 @@ require_once '../../Traitement/Client/saisir-consomation.php';
 <body>
     <div class="hero_area">
         <!-- Header Section -->
-        <header class="header_section">
-            <div class="header_top">
-                <div class="container-fluid">
-                    <div class="brand_nav">
-                        <div class="logo_container">
-                            <a class="navbar-brand" href="dashboard_finalUser.php">
-                                <img src="images/electricite.png" alt="Logo VoltForce" class="logo">
-                                <span>VoltForce</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="header_bottom">
-                <div class="container-fluid">
-                    <nav class="navbar navbar-expand-lg custom_nav-container">
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="dashboard_finalUser.php">Mon Tableau de Bord</a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="saisir-consommation.php">Saisir Consommation</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="mes-factures.php">Mes Factures</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="ma-consommation.php">Ma Consommation</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="mes-reclamations.php">Mes Réclamations</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="logout.php">Déconnexion</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </header>
+        <?php
+        include("header.php");
+        ?>
 
         <!-- Main Content -->
         <section class="dashboard_section py-5">
@@ -145,7 +103,7 @@ require_once '../../Traitement/Client/saisir-consomation.php';
                                 <?php if ($last_consumption && !empty($last_consumption['photo_compteur'])): ?>
                                 <div class="mt-3">
                                     <h6>Dernière photo envoyée (Du dernier mois) :</h6>
-                                    <img src="<?= '../../'.htmlspecialchars($last_consumption['photo_compteur']) ?>" 
+                                    <img src="<?= '../'.htmlspecialchars($last_consumption['photo_compteur']) ?>" 
                                          alt="Dernière photo du compteur (Du dernier mois)" 
                                          class="img-thumbnail mt-2" style="max-height: 150px;">
                                 </div>

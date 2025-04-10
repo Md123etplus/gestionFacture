@@ -18,9 +18,9 @@ require_once '../../Traitement/Client/ma-consomation.php';
 <body>
     <div class="hero_area">
         <!-- Header Section -->
-        <header class="header_section">
-            <!-- ... Votre code header existant ... -->
-        </header>
+        <?php
+        include("header.php");
+        ?>
 
         <!-- Main Content -->
         <section class="dashboard_section py-5">

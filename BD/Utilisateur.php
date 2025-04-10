@@ -3,23 +3,37 @@ require_once 'Connexion.php';
 
 function add_client($nom, $prenom, $email, $mot_de_passe, $type, $numero_compteur, $adresse_installation) {
     $conn = connexion();
-    
+
     try {
         $conn->beginTransaction();
-        
+
         // Insérer l'utilisateur
-        $sql_utilisateur = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, type) VALUES (:nom, :prenom, :email, :mot_de_passe, :type)";
+        $sql_utilisateur = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, type) 
+                            VALUES (:nom, :prenom, :email, :mot_de_passe, :type)";
         $stmt = $conn->prepare($sql_utilisateur);
-        $stmt->execute(['nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'mot_de_passe' => $mot_de_passe, 'type' => $type]);
-        
+        $stmt->execute([
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'email' => $email,
+            'mot_de_passe' => $mot_de_passe,
+            'type' => $type
+        ]);
+
         // Récupérer l'ID du nouvel utilisateur
         $id_utilisateur = $conn->lastInsertId();
-        
-        // Insérer dans `client`
-        $sql_client = "INSERT INTO client (id_client, numero_compteur, adresse_installation) VALUES (:id_client, :numero_compteur, :adresse_installation)";
-        $stmt = $conn->prepare($sql_client);
-        $stmt->execute(['id_client' => $id_utilisateur, 'numero_compteur' => $numero_compteur, 'adresse_installation' => $adresse_installation]);
-        
+
+        // Si c’est un client, on insère les infos dans la table client
+        if ($type === 'client') {
+            $sql_client = "INSERT INTO client (id_client, numero_compteur, adresse_installation) 
+                           VALUES (:id_client, :numero_compteur, :adresse_installation)";
+            $stmt = $conn->prepare($sql_client);
+            $stmt->execute([
+                'id_client' => $id_utilisateur,
+                'numero_compteur' => $numero_compteur,
+                'adresse_installation' => $adresse_installation
+            ]);
+        }
+
         $conn->commit();
         return true;
     } catch (PDOException $e) {
@@ -27,6 +41,7 @@ function add_client($nom, $prenom, $email, $mot_de_passe, $type, $numero_compteu
         return false;
     }
 }
+
 
 function get_all_clients() {
     $conn = connexion(); // Assuming `connexion` is your PDO connection function

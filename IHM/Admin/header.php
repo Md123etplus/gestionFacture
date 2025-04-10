@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="/Traitement/Utilisateurs.php">Dashboard</a>
+                <a class="nav-link" href="/Traitement/Utilisateurs.php?action=homeAdmin">Dashboard</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/Traitement/Utilisateurs.php?action=getAllClients">Gestion Clients</a>
@@ -32,9 +32,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/Traitement/Utilisateurs.php?action=reclamation">Réclamations</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="admin-releves.html">Relevés</a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/Traitement/Utilisateurs.php?action=logout">Déconnexion</a>
             </li>

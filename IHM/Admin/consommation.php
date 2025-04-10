@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if (!isset($_SESSION['id_utilisateur'])) {
+  if (!isset($_SESSION['user_id'])) {
     header('Location: ../../IHM/Admin/login.php');
     exit();
   }
@@ -70,7 +70,7 @@ session_start();
                     <td><?= $conso['valeur_compteur'] ?> kWh</td>
                     
                     <td>
-                        <img src="/IHM/Admin/photos/<?= $conso['photo_compteur'] ?>" width="100">
+                        <img src="/IHM/<?= $conso['photo_compteur'] ?>" width="100">
                     </td>
                     
                    
