@@ -197,7 +197,12 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `mot_de_passe`, `type`, `date_creation`) VALUES
 (5, 'benani', 'ahme', 'rajae9433@gmail.com', '$2y$10$9PHMEs3NzVidFVV9ePdyBefu14L38vRjJ47BLaixR5312fV8oVQFy', 'client', '2025-03-30 17:22:58'),
 (7, 'Admin', 'Super', 'admin@voltforce.com', '1', 'fournisseur', '2025-04-01 22:03:12'),
-(4, 'allaoui', 'hala', 'hala@gmail.com', '$2y$10$6Ymqs0EON74cZDHj8/CNBuqm/989l4cNCLboIqMyNhWSEiaRMvjzK', 'client', '2025-03-30 17:16:49');
+(4, 'allaoui', 'hala', 'hala@gmail.com', '$2y$10$6Ymqs0EON74cZDHj8/CNBuqm/989l4cNCLboIqMyNhWSEiaRMvjzK', 'client', '2025-03-30 17:16:49'),
+
+
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom`, `prenom`, `email`, `mot_de_passe`, `type`, `date_creation`) VALUES
+(8, 'admin', 'admin', 'admin@admin.com', '$2y$10$F2R9rpgr4xEnTNsZiRYUwuXbK4W5oAAM6kDNxsfD1od4DP/B1En2u', 'fournisseur', '2025-04-01 22:03:12');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

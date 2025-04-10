@@ -20,13 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     // alert("Heu");
     // console.log(formData.get('fileUpload'));
-        fetch('/Traitement/Utilisateurs.php', {
+        fetch('/Traitement/Admin/uploadConsom.php', {
             method: 'POST',
             body: formData
         })
         
         .then(response => response.json())
         .then(data => {
+            // alert(data);
+            console.log(data);
             // alert("Heu");
             if (data.success) {
                 statusDiv.innerHTML = `<p class="text-success">${data.message}</p>`;
@@ -36,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             
-            statusDiv.innerHTML = '<p class="text-danger">Erreur lors du téléversement du fichier.</p>';
+            statusDiv.innerHTML = '<p class="text-danger">Erreur lors du téléversement du fichier.'+ error+'</p>';
             
         });
     });

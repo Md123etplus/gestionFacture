@@ -265,20 +265,20 @@ $(document).ready(function () {
         });
     
         // Traiter
-        $(document).on('click', '.btn-traiter', function () {
-            const id = $(this).data('id');
-            $.post('/Traitement/Utilisateurs.php', {
-                action: 'traiterReclamation',
-                id_reclamation: id
-            }, function (response) {
-                if (response.success) {
-                    alert("Réclamation mise en cours de traitement.");
-                    location.reload();
-                } else {
-                    alert("Erreur lors du traitement.");
-                }
-            }, 'json');
-        });
+        // $(document).on('click', '.btn-traiter', function () {
+        //     const id = $(this).data('id');
+        //     $.post('/Traitement/Utilisateurs.php', {
+        //         action: 'traiterReclamation',
+        //         id_reclamation: id
+        //     }, function (response) {
+        //         if (response.success) {
+        //             alert("Réclamation mise en cours de traitement.");
+        //             location.reload();
+        //         } else {
+        //             alert("Erreur lors du traitement.");
+        //         }
+        //     }, 'json');
+        // });
     
         // Finaliser
         $(document).on('click', '.btn-finaliser', function () {

@@ -1,4 +1,5 @@
 <?php
+
 define('ROOT', str_replace('Traitement\Utilisateurs.php', '', $_SERVER['SCRIPT_FILENAME']));
 require_once ROOT . 'BD\Utilisateur.php';
 // if(isset($_FILES['fileUpload'])){
@@ -310,6 +311,8 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
 
 }else // Vérification du fichier et insertion
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileUpload'])) {
+    header(header: 'Content-Type: application/json');
+
     // var_dump($_FILES); 
     echo "File received";
     $file = $_FILES['fileUpload']['tmp_name'];
@@ -334,8 +337,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileUpload'])) {
         fclose($handle);
         
         // Retourner une réponse JSON
+        header('Content-Type: application/json');
         echo json_encode(["success" => true, "message" => "Les données ont été insérées avec succès."]);
     } else {
+        header('Content-Type: application/json');
         echo json_encode(["success" => false, "message" => "Erreur lors de l'ouverture du fichier."]);
     }
 }
